@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 Step 3: Running PostgreSQL with Docker (for local development)
 To ensure PostgreSQL works smoothly in Docker, follow these steps:
 
@@ -81,7 +81,7 @@ Click on Create Pull Request and add reviewers.
 
 The team can then review, comment, and approve the code before merging it into the main branch.
 
-=======
+
 # Grievance System (Spring Boot + PostgreSQL)
 
 ## Prerequisites
