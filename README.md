@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 Step 3: Running PostgreSQL with Docker (for local development)
 To ensure PostgreSQL works smoothly in Docker, follow these steps:
 
@@ -80,3 +81,21 @@ Click on Create Pull Request and add reviewers.
 
 The team can then review, comment, and approve the code before merging it into the main branch.
 
+=======
+# Grievance System (Spring Boot + PostgreSQL)
+
+## Prerequisites
+- Docker & Docker Compose
+- Java 17+
+- Maven
+
+## Getting Started
+
+1. Build the project:
+   mvn clean package
+
+2. Run Docker Compose:
+   docker-compose up --build
+
+App will be available at http://localhost:8080
+>>>>>>> ebc4099 (first commit)
