@@ -28,9 +28,13 @@ public class SecurityConfig {
       .logout().permitAll();
   }
 
-  @Override
-  protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-    auth.inMemoryAuthentication()
-      .withUser("user").password("{noop}password").roles("USER");
+  @Bean
+  public UserDetailsService userDetailsService() {
+    UserDetails user = User.withDefaultPasswordEncoder()
+        .username("user")
+        .password("password")
+        .roles("USER")
+        .build();
+    return new InMemoryUserDetailsManager(user);
   }
 }
