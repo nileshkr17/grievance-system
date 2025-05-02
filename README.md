@@ -35,9 +35,3 @@ PostgreSQL Persistence:
 
 The docker-compose.yml uses a volume (pgdata) to persist data across container restarts. So, even if Docker is restarted, the PostgreSQL data will persist.
 
-
-App will be available at http://localhost:8080
-
-
-NILESH IR
-
