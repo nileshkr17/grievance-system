@@ -26,9 +26,14 @@ public class GrievanceForumService {
 
   // Add a comment to a grievance (example)
   public Grievance addComment(GrievanceRequest grievanceRequest) {
-    Grievance grievance = new Grievance();
-    // Logic to add comment to grievance, this can be expanded
+    // Retrieve the existing grievance by ID
+    Grievance grievance = grievanceRepository.findById(grievanceRequest.getId())
+        .orElseThrow(() -> new IllegalArgumentException("Grievance not found with ID: " + grievanceRequest.getId()));
+    
+    // Add the comment to the existing grievance
     grievance.setComment(grievanceRequest.getComment());
+    
+    // Save the updated grievance
     return grievanceRepository.save(grievance);
   }
 
