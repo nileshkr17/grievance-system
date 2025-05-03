@@ -2,4 +2,7 @@
 1. mvn clean package -DskipTests
 
 
-2. docker-compose up --build
+2. docker-compose up --build -d
+
+// to run postgress env using docker 
+docker exec -it postgres psql -U postgres
