@@ -1,4 +1,10 @@
 package com.app.grievance.repository;
+import com.app.grievance.model.User;
+import com.app.grievance.model.Role;
+import com.app.grievance.model.Role.RoleName;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public class RoleRepository {
+import java.util.Optional;
+public interface RoleRepository extends JpaRepository<Role, Long>{
+    Optional<Role> findByName(RoleName roleName);
 }
