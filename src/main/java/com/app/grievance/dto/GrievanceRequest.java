@@ -1,15 +1,28 @@
 package com.app.grievance.dto;
 
+import jakarta.validation.constraints.NotBlank;
+
 public class GrievanceRequest {
 
+  @NotBlank(message = "ID cannot be blank")
+  private Long id;
 
+  @NotBlank(message = "Comment cannot be blank")
   private String comment;
 
-  public String getComment(){
+  public Long getId() {
+    return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
+  }
+
+  public String getComment() {
     return comment;
   }
 
-  public void setComment(String comment){
+  public void setComment(String comment) {
     this.comment = comment;
   }
 }
