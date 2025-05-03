@@ -23,4 +23,8 @@ public class AuthController {
         String token = authService.register(request);
         return ResponseEntity.ok().body("Bearer " + token);
     }
+    @GetMapping("/test")
+    public ResponseEntity<String> test() {
+        return ResponseEntity.ok("Test endpoint");
+    }
 }

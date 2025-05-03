@@ -43,14 +43,14 @@ public class AuthService {
             throw new RuntimeException("Email is already taken.");
         }
 
-        Role userRole = roleRepository.findByName(RoleName.ROLE_USER)
-                .orElseThrow(() -> new RuntimeException("Default role not found"));
+//        Role userRole = roleRepository.findByName(RoleName.ROLE_USER)
+//                .orElseThrow(() -> new RuntimeException("Default role not found"));
 
         User user = new User();
         user.setUsername(request.getUsername());
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setRoles(Collections.singleton(userRole));
+//        user.setRoles(Collections.singleton(userRole));
 
         userRepository.save(user);
 
