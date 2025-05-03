@@ -1,11 +1,9 @@
 package com.app.grievance.dto;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 
 public class GrievanceRequest {
 
-  @NotNull(message = "ID cannot be null")
   private Long id;
 
   @NotBlank(message = "Comment cannot be blank")
