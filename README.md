@@ -5,6 +5,7 @@ The docker-compose.yml file I provided earlier already has the PostgreSQL setup.
 
 To start PostgreSQL, run:
 
+
 bash
 Copy
 Edit
