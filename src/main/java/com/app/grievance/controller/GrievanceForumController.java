@@ -34,6 +34,12 @@ public class GrievanceForumController {
     return ResponseEntity.ok("Endpoint working");
   }
 
+  @GetMapping("/grievances/test2")
+  public ResponseEntity<?> getAllGrievancesTest2() {
+    //return endpoint working
+    return ResponseEntity.ok("Endpoint working");
+  }
+
   // Endpoint to add a comment to a grievance
   @PostMapping("/add-comment")
   public ResponseEntity<?> addComment(@RequestBody GrievanceRequest grievanceRequest) {
