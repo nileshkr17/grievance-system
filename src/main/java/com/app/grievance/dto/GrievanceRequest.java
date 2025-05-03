@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 
 public class GrievanceRequest {
 
-  @NotBlank(message = "ID cannot be blank")
+  @NotNull(message = "ID cannot be null")
   private Long id;
 
   @NotBlank(message = "Comment cannot be blank")
