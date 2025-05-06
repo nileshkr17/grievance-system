@@ -1,12 +1,19 @@
 package com.app.grievance.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
+import java.util.Date;
+
+@Setter
+@Getter
 @Entity
 @Table(name = "grievance")  // Ensure the table name matches the one in your MySQL database
 public class Grievance {
 
-  @Id
+    // Getters and Setters
+    @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
@@ -15,6 +22,10 @@ public class Grievance {
   private String status;       // OPEN, PENDING, RESOLVED
   private String comment;
   private String category;     //  Newly added field
+  @Column(name = "created_by")
+  private String createdBy;
+  @Column(name = "assigned_to")
+  private String assignedTo;
 
   @Column(name = "created_at", nullable = false, updatable = false)
   @Temporal(TemporalType.TIMESTAMP)
@@ -24,69 +35,17 @@ public class Grievance {
   public Grievance() {}
 
   // Constructor with fields (including category)
-  public Grievance(String title, String description, String status, String comment, String category, java.util.Date createdAt) {
+  public Grievance(String title, String description, String status, String comment, String category,  String createdBy, String assignedTo,java.util.Date createdAt) {
     this.title = title;
     this.description = description;
     this.status = status;
     this.comment = comment;
     this.category = category;
     this.createdAt = createdAt;
+    this.createdBy = createdBy;
+    this.assignedTo = assignedTo;
   }
 
-  // Getters and Setters
-  public Long getId() {
-    return id;
-  }
 
-  public void setId(Long id) {
-    this.id = id;
-  }
 
-  public String getTitle() {
-    return title;
-  }
-
-  public void setTitle(String title) {
-    this.title = title;
-  }
-
-  public String getDescription() {
-    return description;
-  }
-
-  public void setDescription(String description) {
-    this.description = description;
-  }
-
-  public String getStatus() {
-    return status;
-  }
-
-  public void setStatus(String status) {
-    this.status = status;
-  }
-
-  public String getComment() {
-    return comment;
-  }
-
-  public void setComment(String comment) {
-    this.comment = comment;
-  }
-
-  public String getCategory() {
-    return category;
-  }
-
-  public void setCategory(String category) {
-    this.category = category;
-  }
-
-  public java.util.Date getCreatedAt() {
-    return createdAt;
-  }
-
-  public void setCreatedAt(java.util.Date createdAt) {
-    this.createdAt = createdAt;
-  }
 }

@@ -98,4 +98,9 @@ public class GrievanceForumService {
     return grievanceRepository.findAll(pageable);
   }
 
+  //for filtering
+  public List<Grievance> filterGrievances(String status, String createdBy, String assignedTo) {
+    return grievanceRepository.filterGrievances(status, createdBy, assignedTo);
+  }
+
 }

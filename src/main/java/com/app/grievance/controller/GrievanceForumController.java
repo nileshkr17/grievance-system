@@ -59,4 +59,14 @@ public class GrievanceForumController {
     return grievanceForumService.getAllGrievancesSorted(page, size);
   }
 
+
+  //for filtering
+  @GetMapping("/grievances/filter")
+  public ResponseEntity<?> filterGrievances(
+          @RequestParam(required = false) String status,
+          @RequestParam(required = false, name = "created_by") String createdBy,
+          @RequestParam(required = false, name = "assigned_to") String assignedTo
+  ) {
+    return ResponseEntity.ok(grievanceForumService.filterGrievances(status, createdBy, assignedTo));
+  }
 }
