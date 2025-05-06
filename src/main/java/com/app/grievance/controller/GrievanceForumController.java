@@ -47,7 +47,7 @@ public class GrievanceForumController {
     return ResponseEntity.ok(saved);
   }
 
-  // Endpoint to view grievances (could be filtered by status, etc.)
+  // Endpoint to view grievancesby id
   @GetMapping("/grievances/{id}")
   public ResponseEntity<Grievance> getGrievanceById(@PathVariable Long id) {
     return ResponseEntity.ok(grievanceForumService.getGrievanceById(id));
