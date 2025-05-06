@@ -1,17 +1,11 @@
 package com.app.grievance.controller;
 
 import com.app.grievance.dto.GrievanceRequest;
+import com.app.grievance.model.Grievance;
 import com.app.grievance.service.GrievanceForumService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
-
+import org.springframework.web.bind.annotation.*;
 
 
 @RestController
@@ -44,6 +38,19 @@ public class GrievanceForumController {
   @GetMapping("/search")
   public ResponseEntity<?> searchGrievances(@RequestParam String query) {
     return ResponseEntity.ok(grievanceForumService.searchGrievances(query));
+  }
+
+  //Endpoint to add grievances
+  @PostMapping("/grievances")
+  public ResponseEntity<Grievance> createGrievance(@RequestBody Grievance grievance) {
+    Grievance saved = grievanceForumService.createGrievance(grievance);
+    return ResponseEntity.ok(saved);
+  }
+
+  // Endpoint to view grievances (could be filtered by status, etc.)
+  @GetMapping("/grievances/{id}")
+  public ResponseEntity<Grievance> getGrievanceById(@PathVariable Long id) {
+    return ResponseEntity.ok(grievanceForumService.getGrievanceById(id));
   }
 
 }

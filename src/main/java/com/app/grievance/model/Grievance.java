@@ -3,7 +3,7 @@ package com.app.grievance.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name="grievance_db")
+@Table(name="grievance")
 public class Grievance {
 
   @Id
@@ -55,4 +55,5 @@ public class Grievance {
   public void setComment(String comment) {
     this.comment = comment;
   }
+
 }

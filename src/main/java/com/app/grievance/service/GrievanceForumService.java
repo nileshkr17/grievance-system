@@ -70,4 +70,17 @@ public class GrievanceForumService {
   public List<Grievance> searchGrievances(String query) {
     return grievanceRepository.searchByQuery(query); // Assuming you add a method for search
   }
+
+
+  //post for service
+  public Grievance createGrievance(Grievance grievance) {
+    return grievanceRepository.save(grievance);
+  }
+
+  //get for grievance by id
+  public Grievance getGrievanceById(Long id) {
+    return grievanceRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Grievance not found"));
+  }
+
 }
