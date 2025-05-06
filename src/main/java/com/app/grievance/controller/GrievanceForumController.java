@@ -4,6 +4,7 @@ import com.app.grievance.dto.GrievanceRequest;
 import com.app.grievance.model.Grievance;
 import com.app.grievance.service.GrievanceForumService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -51,6 +52,11 @@ public class GrievanceForumController {
   @GetMapping("/grievances/{id}")
   public ResponseEntity<Grievance> getGrievanceById(@PathVariable Long id) {
     return ResponseEntity.ok(grievanceForumService.getGrievanceById(id));
+  }
+  //endpoint for sorting
+  @GetMapping("/grievances/sorted")
+  public Page<Grievance> getSortedGrievances(@RequestParam int page, @RequestParam int size) {
+    return grievanceForumService.getAllGrievancesSorted(page, size);
   }
 
 }
