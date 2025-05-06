@@ -6,7 +6,7 @@ TO RUN WITH MYSQL YOU NEED MYSQL AND WORKBENCH FOR DASHBOARD
    
 3. In application.prop change your username and password for 
 
-   spring.datasource.username=root
+   spring.datasource.username=root,
    spring.datasource.password=
    as per your system 
 
