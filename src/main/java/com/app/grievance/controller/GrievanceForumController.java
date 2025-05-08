@@ -1,17 +1,12 @@
 package com.app.grievance.controller;
 
 import com.app.grievance.dto.GrievanceRequest;
+import com.app.grievance.model.Grievance;
 import com.app.grievance.service.GrievanceForumService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
-
+import org.springframework.web.bind.annotation.*;
 
 
 @RestController
@@ -46,4 +41,32 @@ public class GrievanceForumController {
     return ResponseEntity.ok(grievanceForumService.searchGrievances(query));
   }
 
+  //Endpoint to add grievances
+  @PostMapping("/grievances")
+  public ResponseEntity<Grievance> createGrievance(@RequestBody Grievance grievance) {
+    Grievance saved = grievanceForumService.createGrievance(grievance);
+    return ResponseEntity.ok(saved);
+  }
+
+  // Endpoint to view grievancesby id
+  @GetMapping("/grievances/{id}")
+  public ResponseEntity<Grievance> getGrievanceById(@PathVariable Long id) {
+    return ResponseEntity.ok(grievanceForumService.getGrievanceById(id));
+  }
+  //endpoint for sorting
+  @GetMapping("/grievances/sorted")
+  public Page<Grievance> getSortedGrievances(@RequestParam int page, @RequestParam int size) {
+    return grievanceForumService.getAllGrievancesSorted(page, size);
+  }
+
+
+  //for filtering
+  @GetMapping("/grievances/filter")
+  public ResponseEntity<?> filterGrievances(
+          @RequestParam(required = false) String status,
+          @RequestParam(required = false, name = "created_by") String createdBy,
+          @RequestParam(required = false, name = "assigned_to") String assignedTo
+  ) {
+    return ResponseEntity.ok(grievanceForumService.filterGrievances(status, createdBy, assignedTo));
+  }
 }
