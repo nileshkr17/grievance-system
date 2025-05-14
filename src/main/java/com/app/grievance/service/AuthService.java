@@ -35,6 +35,11 @@ public class AuthService {
         User user = userRepository.findByEmail(loginRequest.getEmail())
                 .orElseThrow(() -> new CustomException("User does not exist"));
         logger.info("User details: {}", user);
+
+        // Role check
+        if (loginRequest.getRole() != null && !loginRequest.getRole().equalsIgnoreCase(user.getRole())) {
+            throw new CustomException("You do not have the required permission to login as " + loginRequest.getRole());
+        }
         try {
             logger.info("Logg Before Authentication: {}", loginRequest);
             Authentication authentication = authenticationManager.authenticate(
