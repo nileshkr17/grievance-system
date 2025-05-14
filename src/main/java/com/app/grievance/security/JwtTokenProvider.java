@@ -11,12 +11,12 @@ public class JwtTokenProvider {
     private final String jwtSecret = "yourSecretKey"; // Replace with your secret key
     private final long jwtExpirationInMs = 3600000; // 1 hour
 
-    public String generateToken(String username) {
+    public String generateToken(String email) {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + jwtExpirationInMs);
 
         return Jwts.builder()
-                .setSubject(username)
+                .setSubject(email)
                 .setIssuedAt(now)
                 .setExpiration(expiryDate)
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)

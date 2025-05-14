@@ -34,15 +34,17 @@ public class AuthService {
         User user;
         logger.info("Logg Before Authentication: {}", loginRequest);
         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword())
+                new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword())
         );
         logger.info("Logg after Authentication: {}", authentication);
         token = jwtTokenProvider.generateToken(authentication.getName());
         logger.info("Token: {}", token);
-        user = userRepository.findByUsername(authentication.getName())
+        user = userRepository.findByEmail(authentication.getName())
                 .orElseThrow(() -> new CustomException("User not found"));
 
-        return new LoginResponse(token, user.getUsername(), user.getEmail());
+        String role = (user.getRole() != null && !user.getRole().isEmpty()) ? user.getRole() : "user";
+
+        return new LoginResponse(token, user.getUsername(), user.getEmail(), role);
     }
 
     public String register(RegisterRequest request) {
@@ -59,9 +61,14 @@ public class AuthService {
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
 
+        String role = (request.getRole() != null && !request.getRole().isEmpty())
+                ? request.getRole()
+                : "user";
+
+        user.setRole(role);
 
         userRepository.save(user);
 
-        return jwtTokenProvider.generateToken(user.getUsername());
+        return jwtTokenProvider.generateToken(user.getEmail());
     }
 }

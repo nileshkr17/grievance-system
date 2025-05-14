@@ -1,7 +1,5 @@
 package com.app.grievance.controller;
 
-import com.app.grievance.model.Role.RoleName;
-import com.app.grievance.model.RoleMapping;
 import com.app.grievance.model.User;
 import com.app.grievance.service.AdminService;
 
@@ -21,6 +19,11 @@ public class AdminController {
     @GetMapping("/users")
     public ResponseEntity<List<User>> getAllUsers() {
         return ResponseEntity.ok(adminService.getAllUsers());
+    }
+
+    @GetMapping("/users/role/{role}")
+    public ResponseEntity<List<User>> getUsersByRole(@PathVariable String role) {
+        return ResponseEntity.ok(adminService.getAllUsersByRole(role));
     }
 
     @PostMapping("/users")
@@ -47,9 +50,8 @@ public class AdminController {
     }
 
     @PostMapping("/users/{userId}/assign-role")
-    public ResponseEntity<RoleMapping> assignRole(@PathVariable Long userId,
-                                                  @RequestParam RoleName roleName) {
+    public ResponseEntity<User> assignRole(@PathVariable Long userId,
+                                           @RequestParam String roleName) {
         return ResponseEntity.ok(adminService.assignRoleToUser(userId, roleName));
     }
 }
-

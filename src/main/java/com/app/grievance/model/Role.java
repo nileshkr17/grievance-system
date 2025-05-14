@@ -1,4 +1,5 @@
 package com.app.grievance.model;
+
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -11,12 +12,10 @@ public class Role {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    @Column(unique = true)
     private RoleName name;
 
     public enum RoleName {
         ROLE_ADMIN,
         ROLE_USER,
-        ROLE_MANAGER
     }
 }
