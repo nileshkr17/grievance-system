@@ -3,6 +3,7 @@ import com.app.grievance.dto.LoginRequest;
 import com.app.grievance.dto.LoginResponse;
 import com.app.grievance.dto.RegisterRequest;
 import com.app.grievance.dto.RegisterResponse;
+import com.app.grievance.exception.CustomException;
 import com.app.grievance.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -29,20 +30,26 @@ public class AuthController {
             logger.info("Login successful for username: {}, returning response: {}", request.getEmail(), response);
 
             return ResponseEntity.ok(response);
+        } catch (CustomException e) {
+            // Handle custom errors (e.g., user not found, invalid password)
+            logger.warn("Custom error during login: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+
         } catch (Exception e) {
-            // Log the exception if something goes wrong
-            logger.error("Error occurred during login attempt for username: {}", request.getEmail(), e);
+            // Log other unexpected errors
+            logger.error("Unexpected error occurred during login for username: {}", request.getEmail(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("An error occurred during login");
+                    .body("An unexpected error occurred during login");
         }
     }
 
-    @PostMapping("/register")
+    @PostMapping(value = "/register")
     public ResponseEntity<RegisterResponse> register(@RequestBody RegisterRequest request) {
-        String token = authService.register(request);
+        RegisterResponse response = authService.register(request);
         // System.out.println("Register request: " + request);
-        return ResponseEntity.ok(new RegisterResponse("Bearer " + token));
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
+
     @GetMapping("/test")
     public ResponseEntity<String> test() {
         return ResponseEntity.ok("Test endpoint");
