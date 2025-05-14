@@ -3,6 +3,7 @@ import com.app.grievance.controller.AuthController;
 import com.app.grievance.dto.LoginRequest;
 import com.app.grievance.dto.LoginResponse;
 import com.app.grievance.dto.RegisterRequest;
+import com.app.grievance.dto.RegisterResponse;
 import com.app.grievance.exception.CustomException;
 import com.app.grievance.model.User;
 import com.app.grievance.repository.UserRepository;
@@ -31,21 +32,44 @@ public class AuthService {
 
     public LoginResponse login(LoginRequest loginRequest) {
         String token;
-        User user;
-        logger.info("Logg Before Authentication: {}", loginRequest);
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword())
-        );
-        logger.info("Logg after Authentication: {}", authentication);
-        token = jwtTokenProvider.generateToken(authentication.getName());
-        logger.info("Token: {}", token);
-        user = userRepository.findByUsername(authentication.getName())
-                .orElseThrow(() -> new CustomException("User not found"));
+        User user = userRepository.findByEmail(loginRequest.getEmail())
+                .orElseThrow(() -> new CustomException("User does not exist"));
+        logger.info("User details: {}", user);
 
-        return new LoginResponse(token, user.getUsername(), user.getEmail());
+        // Role check
+        if (loginRequest.getRole() != null && !loginRequest.getRole().equalsIgnoreCase(user.getRole())) {
+            throw new CustomException("You do not have the required permission to login as " + loginRequest.getRole());
+        }
+        try {
+            logger.info("Logg Before Authentication: {}", loginRequest);
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword())
+            );
+
+            logger.info("Logg after Authentication: {}", authentication);
+
+            token = jwtTokenProvider.generateToken(user.getEmail());
+
+            //        String role = (user.getRole() != null && !user.getRole().isEmpty()) ? user.getRole() : "user";
+
+            return new LoginResponse(
+                    token,
+                    user.getUsername(),
+                    user.getEmail(),
+                    user.getRole()
+            );
+        }catch (BadCredentialsException e) {
+            // Password is incorrect
+            throw new CustomException("Invalid password");
+        } catch (Exception e) {
+            // Other unexpected errors
+            logger.error("Unexpected error during login", e);
+            throw new CustomException("Login failed due to server error");
+        }
+
     }
 
-    public String register(RegisterRequest request) {
+    public RegisterResponse register(RegisterRequest request) {
         if (userRepository.existsByUsername(request.getUsername())) {
             throw new CustomException("Username is already taken.");
         }
@@ -57,11 +81,17 @@ public class AuthService {
         User user = new User();
         user.setUsername(request.getUsername());
         user.setEmail(request.getEmail());
+        user.setRole(request.getRole() != null ? request.getRole() : "user");
         user.setPassword(passwordEncoder.encode(request.getPassword()));
-
 
         userRepository.save(user);
 
-        return jwtTokenProvider.generateToken(user.getUsername());
+//        return jwtTokenProvider.generateToken(user.getEmail());
+        return new RegisterResponse(
+                "User registered successfully",
+                user.getUsername(),
+                user.getEmail(),
+                user.getRole()
+        );
     }
 }

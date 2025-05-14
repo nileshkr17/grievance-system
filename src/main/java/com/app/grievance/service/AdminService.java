@@ -1,13 +1,7 @@
 package com.app.grievance.service;
 
-import com.app.grievance.model.Role;
-import com.app.grievance.model.Role.RoleName;
-import com.app.grievance.model.RoleMapping;
 import com.app.grievance.model.User;
-import com.app.grievance.repository.RoleMappingRepository;
-import com.app.grievance.repository.RoleRepository;
 import com.app.grievance.repository.UserRepository;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,17 +14,19 @@ public class AdminService {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private RoleRepository roleRepository;
-
-    @Autowired
-    private RoleMappingRepository roleMappingRepository;
-
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
 
+    public List<User> getAllUsersByRole(String role) {
+        return userRepository.findAllByRole(role);
+    }
+
     public User createUser(User user) {
+        // Default role if none is provided
+        if (user.getRole() == null || user.getRole().isEmpty()) {
+            user.setRole("user");
+        }
         return userRepository.save(user);
     }
 
@@ -38,11 +34,13 @@ public class AdminService {
         return userRepository.findById(id);
     }
 
+
     public User updateUser(Long id, User updatedUser) {
         return userRepository.findById(id).map(user -> {
             user.setUsername(updatedUser.getUsername());
             user.setEmail(updatedUser.getEmail());
-            user.setPassword(updatedUser.getPassword()); // encode this in real apps!
+            user.setPassword(updatedUser.getPassword()); // TODO: encode password in production
+            user.setRole(updatedUser.getRole() != null ? updatedUser.getRole() : "user");
             return userRepository.save(user);
         }).orElseThrow(() -> new RuntimeException("User not found"));
     }
@@ -51,16 +49,11 @@ public class AdminService {
         userRepository.deleteById(id);
     }
 
-    public RoleMapping assignRoleToUser(Long userId, RoleName roleName) {
+    public User assignRoleToUser(Long userId, String roleName) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        Role role = roleRepository.findByName(roleName)
-                .orElseThrow(() -> new RuntimeException("Role not found"));
-
-        RoleMapping mapping = new RoleMapping();
-        mapping.setUser(user);
-        mapping.setRole(role);
-        return roleMappingRepository.save(mapping);
+        user.setRole(roleName);
+        return userRepository.save(user);
     }
 }
