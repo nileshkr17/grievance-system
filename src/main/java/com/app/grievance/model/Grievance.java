@@ -14,8 +14,8 @@ import java.util.Random; // Import for random number generation
 public class Grievance {
 
   @Id
-  // The ID will now be generated programmatically as a 5-character alphanumeric string.
-  private String id; // Type remains String for alphanumeric ID
+  // The ID will now be generated programmatically as a 5-digit numeric string.
+  private String id; // Type remains String for numeric ID
 
   private String title;
   private String description;
@@ -31,27 +31,27 @@ public class Grievance {
   @Temporal(TemporalType.TIMESTAMP)
   private java.util.Date createdAt;
 
-  // Helper method to generate a 5-character alphanumeric ID
-  private String generateAlphanumericId() {
-    String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  // Helper method to generate a 5-digit numeric ID
+  private String generateNumericId() {
+    String digits = "0123456789";
     StringBuilder sb = new StringBuilder();
     Random random = new Random();
     for (int i = 0; i < 5; i++) {
-      sb.append(chars.charAt(random.nextInt(chars.length())));
+      sb.append(digits.charAt(random.nextInt(digits.length())));
     }
     return sb.toString();
   }
 
   // Default constructor
   public Grievance() {
-    // Generate a 5-character alphanumeric ID when a new Grievance object is created
-    this.id = generateAlphanumericId();
+    // Generate a 5-digit numeric ID when a new Grievance object is created
+    this.id = generateNumericId();
   }
 
   // Constructor with fields (including category)
   public Grievance(String title, String description, String status, String comment, String category, String createdBy, String assignedTo, java.util.Date createdAt) {
-    // Generate a 5-character alphanumeric ID when a new Grievance object is created
-    this.id = generateAlphanumericId();
+    // Generate a 5-digit numeric ID when a new Grievance object is created
+    this.id = generateNumericId();
     this.title = title;
     this.description = description;
     this.status = status;
