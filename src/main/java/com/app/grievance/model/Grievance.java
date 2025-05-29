@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Date;
-import java.util.Random; // Import for random number generation
 
 @Setter
 @Getter
@@ -14,8 +13,13 @@ import java.util.Random; // Import for random number generation
 public class Grievance {
 
   @Id
+<<<<<<< HEAD
   // The ID will now be generated programmatically as a 5-digit numeric string.
   private String id; // Type remains String for numeric ID
+=======
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id; // Changed to Long for numeric ID
+>>>>>>> 1259d89 (comment CRUD completed)
 
   private String title;
   private String description;
@@ -31,6 +35,7 @@ public class Grievance {
   @Temporal(TemporalType.TIMESTAMP)
   private java.util.Date createdAt;
 
+<<<<<<< HEAD
   // Helper method to generate a 5-digit numeric ID
   private String generateNumericId() {
     String digits = "0123456789";
@@ -47,11 +52,18 @@ public class Grievance {
     // Generate a 5-digit numeric ID when a new Grievance object is created
     this.id = generateNumericId();
   }
+=======
+  // Default constructor
+  public Grievance() {}
+>>>>>>> 1259d89 (comment CRUD completed)
 
-  // Constructor with fields (including category)
+  // Constructor with fields (excluding id, which is auto-generated)
   public Grievance(String title, String description, String status, String comment, String category, String createdBy, String assignedTo, java.util.Date createdAt) {
+<<<<<<< HEAD
     // Generate a 5-digit numeric ID when a new Grievance object is created
     this.id = generateNumericId();
+=======
+>>>>>>> 1259d89 (comment CRUD completed)
     this.title = title;
     this.description = description;
     this.status = status;

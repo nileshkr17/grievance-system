@@ -31,28 +31,6 @@ public class GrievanceForumService {
     }
   }
 
-  // Add a comment to a grievance (example)
-//  public Grievance addComment(GrievanceRequest grievanceRequest) {
-//    // Retrieve the existing grievance by ID
-//    try {
-//      Grievance grievance = grievanceRepository.findById(grievanceRequest.getId())
-//        .orElseThrow(() -> new IllegalArgumentException("Grievance not found with ID: " + grievanceRequest.getId()));
-//
-//      // Add the comment to the existing grievance
-//      grievance.setComment(grievanceRequest.getComment());
-//      grievance.setStatus("Commented"); // Update status if needed
-//      return grievanceRepository.save(grievance);
-//    }
-//    catch (Exception e){
-//      e.printStackTrace();  // or log.error("Error:", e);
-//      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Grievance not found with ID: " +grievanceRequest.getId());
-//    }
-//    finally {
-//      System.out.println("Grievance ID: " + grievanceRequest.getId());
-//      System.out.println("Comment: " + grievanceRequest.getComment());
-//    }
-//
-//  }
 
   public Grievance addComment(GrievanceRequest grievanceRequest) {
     try {
@@ -76,11 +54,6 @@ public class GrievanceForumService {
     return grievanceRepository.searchByQuery(query); // Assuming you add a method for search
   }
 
-
-  //post for service
-//  public Grievance createGrievance(Grievance grievance) {
-//    return grievanceRepository.save(grievance);
-//  }
 
   //get for grievance by id
   public Grievance getGrievanceById(Long id) {
