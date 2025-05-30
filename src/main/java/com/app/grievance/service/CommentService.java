@@ -1,7 +1,9 @@
 package com.app.grievance.service;
 
 import com.app.grievance.model.Comment;
+import com.app.grievance.model.Grievance;
 import com.app.grievance.repository.CommentRepository;
+import com.app.grievance.repository.GrievanceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,9 +15,16 @@ public class CommentService {
 
     @Autowired
     private CommentRepository commentRepository;
+    @Autowired
+    private GrievanceRepository grievanceRepository;
 
-    public Comment createComment(Comment comment) {
-        return commentRepository.save(comment);
+    public Comment createComment(Comment comment, Long grievanceId) {
+        Grievance grievance = grievanceRepository.findById(grievanceId)
+                .orElseThrow(() -> new IllegalArgumentException("Grievance not found"));
+        comment.setGrievance(grievance);
+        grievance.getComments().add(comment);
+        grievanceRepository.save(grievance);
+        return comment;
     }
 
     public List<Comment> getAllComments() {
@@ -23,11 +32,15 @@ public class CommentService {
     }
 
     public List<Comment> getCommentsByGrievanceId(Long grievanceId) {
-        return commentRepository.findByGrievanceId(grievanceId);
+        Grievance grievance = grievanceRepository.findById(grievanceId)
+                .orElseThrow(() -> new RuntimeException("Grievance not found"));
+        return commentRepository.findByGrievance(grievance);
     }
 
     public List<Comment> getCommentsByGrievanceIdAndUsername(Long grievanceId, String username) {
-        return commentRepository.findByGrievanceIdAndUsername(grievanceId, username);
+        Grievance grievance = grievanceRepository.findById(grievanceId)
+                .orElseThrow(() -> new RuntimeException("Grievance not found"));
+        return commentRepository.findByGrievanceAndUsername(grievance, username);
     }
 
     public Comment getCommentById(Long id) {
@@ -47,10 +60,14 @@ public class CommentService {
     }
 
     public void deleteComment(Long id) {
-        if (commentRepository.existsById(id)) {
-            commentRepository.deleteById(id);
+        Comment comment = commentRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Comment not found with ID: " + id));
+        Grievance grievance = comment.getGrievance();
+        if (grievance != null) {
+            grievance.getComments().remove(comment);
+            grievanceRepository.save(grievance);
         } else {
-            throw new RuntimeException("Comment not found");
+            commentRepository.deleteById(id);
         }
     }
 }

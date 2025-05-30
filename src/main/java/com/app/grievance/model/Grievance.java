@@ -3,7 +3,8 @@ package com.app.grievance.model;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-
+import java.util.ArrayList;
+import java.util.List;
 
 @Setter
 @Getter
@@ -28,6 +29,9 @@ public class Grievance {
   @Column(name = "created_at", nullable = false, updatable = false)
   @Temporal(TemporalType.TIMESTAMP)
   private java.util.Date createdAt;
+
+  @OneToMany(mappedBy = "grievance", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+  private List<Comment> comments = new ArrayList<>();
 
   // Default constructor
   public Grievance() {}

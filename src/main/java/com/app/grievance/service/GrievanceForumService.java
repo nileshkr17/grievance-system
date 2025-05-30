@@ -57,12 +57,17 @@ public class GrievanceForumService {
 
   //get for grievance by id
   public Grievance getGrievanceById(Long id) {
-    return grievanceRepository.findById(id)
+    Grievance grievance = grievanceRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("Grievance not found"));
+    grievance.getComments().size(); // Force initialization of comments if lazy-loaded
+    return grievance;
   }
 
   public Grievance createGrievance(Grievance grievance) {
     grievance.setCreatedAt(new Date()); // Automatically set the current timestamp
+    if (grievance.getStatus() == null || grievance.getStatus().isEmpty()) {
+      grievance.setStatus("OPEN"); // Default to 'open' if not set
+    }
     return grievanceRepository.save(grievance);
   }
 

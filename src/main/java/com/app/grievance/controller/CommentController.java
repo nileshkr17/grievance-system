@@ -16,10 +16,15 @@ public class CommentController {
     private CommentService commentService;
 
     @PostMapping
-    public ResponseEntity<?> addComment(@RequestBody Comment comment) {
+    public ResponseEntity<?> addComment(@RequestBody Comment comment, @RequestParam Long grievanceId) {
         try {
-            Comment savedComment = commentService.createComment(comment);
+            if (grievanceId == null) {
+                return ResponseEntity.status(400).body("Grievance ID cannot be null");
+            }
+            Comment savedComment = commentService.createComment(comment, grievanceId);
             return ResponseEntity.ok(savedComment);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(400).body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(500).body("Error while saving comment: " + e.getMessage());
         }
@@ -69,7 +74,7 @@ public class CommentController {
             commentService.deleteComment(id);
             return ResponseEntity.ok("Comment deleted successfully.");
         } catch (Exception e) {
-            return ResponseEntity.status(404).body("Comment not found: " + e.getMessage());
+            return ResponseEntity.status(500).body("Error while deleting comment: " + e.getMessage());
         }
     }
 }
