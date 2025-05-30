@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Date;
 
 @Setter
 @Getter
@@ -12,16 +11,15 @@ import java.util.Date;
 @Table(name = "grievance")  // Ensure the table name matches the one in your MySQL database
 public class Grievance {
 
-    // Getters and Setters
-    @Id
+  @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+  private Long id; // Changed to Long for numeric ID
 
   private String title;
   private String description;
   private String status;       // OPEN, PENDING, RESOLVED
   private String comment;
-  private String category;     //  Newly added field
+  private String category;     // Newly added field
   @Column(name = "created_by")
   private String createdBy;
   @Column(name = "assigned_to")
@@ -34,8 +32,8 @@ public class Grievance {
   // Default constructor
   public Grievance() {}
 
-  // Constructor with fields (including category)
-  public Grievance(String title, String description, String status, String comment, String category,  String createdBy, String assignedTo,java.util.Date createdAt) {
+  // Constructor with fields (excluding id, which is auto-generated)
+  public Grievance(String title, String description, String status, String comment, String category, String createdBy, String assignedTo, java.util.Date createdAt) {
     this.title = title;
     this.description = description;
     this.status = status;
@@ -45,7 +43,4 @@ public class Grievance {
     this.createdBy = createdBy;
     this.assignedTo = assignedTo;
   }
-
-
-
 }
