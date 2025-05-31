@@ -22,9 +22,8 @@ public class CommentService {
         Grievance grievance = grievanceRepository.findById(grievanceId)
                 .orElseThrow(() -> new IllegalArgumentException("Grievance not found"));
         comment.setGrievance(grievance);
-        grievance.getComments().add(comment);
-        grievanceRepository.save(grievance);
-        return comment;
+        // Only save the comment, do not add to grievance.getComments() or save grievance here
+        return commentRepository.save(comment);
     }
 
     public List<Comment> getAllComments() {
@@ -32,15 +31,11 @@ public class CommentService {
     }
 
     public List<Comment> getCommentsByGrievanceId(Long grievanceId) {
-        Grievance grievance = grievanceRepository.findById(grievanceId)
-                .orElseThrow(() -> new RuntimeException("Grievance not found"));
-        return commentRepository.findByGrievance(grievance);
+        return commentRepository.findByGrievance_Id(grievanceId);
     }
 
     public List<Comment> getCommentsByGrievanceIdAndUsername(Long grievanceId, String username) {
-        Grievance grievance = grievanceRepository.findById(grievanceId)
-                .orElseThrow(() -> new RuntimeException("Grievance not found"));
-        return commentRepository.findByGrievanceAndUsername(grievance, username);
+        return commentRepository.findByGrievance_IdAndUsername(grievanceId, username);
     }
 
     public Comment getCommentById(Long id) {
@@ -60,14 +55,9 @@ public class CommentService {
     }
 
     public void deleteComment(Long id) {
-        Comment comment = commentRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Comment not found with ID: " + id));
-        Grievance grievance = comment.getGrievance();
-        if (grievance != null) {
-            grievance.getComments().remove(comment);
-            grievanceRepository.save(grievance);
-        } else {
-            commentRepository.deleteById(id);
+        if (!commentRepository.existsById(id)) {
+            throw new RuntimeException("Comment not found with ID: " + id);
         }
+        commentRepository.deleteById(id);
     }
 }
