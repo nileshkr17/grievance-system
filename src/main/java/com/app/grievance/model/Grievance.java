@@ -13,7 +13,6 @@ import java.util.Date;
 public class Grievance {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id; // Changed to Long for numeric ID
 
   private String title;

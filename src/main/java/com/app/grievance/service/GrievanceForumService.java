@@ -2,6 +2,7 @@ package com.app.grievance.service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 import com.app.grievance.dto.GrievanceRequest;
 import com.app.grievance.model.Grievance;
@@ -61,10 +62,10 @@ public class GrievanceForumService {
             .orElseThrow(() -> new RuntimeException("Grievance not found"));
   }
 
-  public Grievance createGrievance(Grievance grievance) {
-    grievance.setCreatedAt(new Date()); // Automatically set the current timestamp
-    return grievanceRepository.save(grievance);
-  }
+  // public Grievance createGrievance(Grievance grievance) {
+  //   grievance.setCreatedAt(new Date()); // Automatically set the current timestamp
+  //   return grievanceRepository.save(grievance);
+  // }
 
   public Page<Grievance> getAllGrievancesSorted(int page, int size) {
     Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
@@ -75,5 +76,37 @@ public class GrievanceForumService {
   public List<Grievance> filterGrievances(String status, String createdBy, String assignedTo) {
     return grievanceRepository.filterGrievances(status, createdBy, assignedTo);
   }
+  
+  
+  
+    private Long generateUnique5DigitId() {
+        Random random = new Random();
+        long id = 10000 + random.nextInt(90000); // generates 5-digit number
+    
+        while (grievanceRepository.existsById(id)) {
+            id = 10000 + random.nextInt(90000);
+        }
+    
+        return id;
+    }
+    
+    public Grievance createGrievance(Grievance grievance) {
+        grievance.setId(generateUnique5DigitId());
+        grievance.setCreatedAt(new Date()); // if not already set
+        return grievanceRepository.save(grievance);
+    }
 
+    public Grievance updateGrievance(Long id, Grievance payload) {
+        Grievance existing = grievanceRepository.findById(id)
+            .orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    "Grievance not found with ID: " + id));
+
+        // only update the three fields
+        existing.setStatus(payload.getStatus());
+        existing.setDescription(payload.getDescription());
+        existing.setCategory(payload.getCategory());
+
+        return grievanceRepository.save(existing);
+    }
 }

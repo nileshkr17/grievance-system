@@ -73,4 +73,13 @@ public class GrievanceForumController {
     }
     return ResponseEntity.ok(filtered);
   }
+
+  @PutMapping("/{id}")
+  public ResponseEntity<Grievance> updateGrievance(
+          @PathVariable Long id,
+          @RequestBody Grievance grievancePayload) {
+
+      Grievance updated = grievanceForumService.updateGrievance(id, grievancePayload);
+      return ResponseEntity.ok(updated);
+  }
 }
