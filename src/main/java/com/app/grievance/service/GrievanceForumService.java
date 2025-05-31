@@ -96,5 +96,17 @@ public class GrievanceForumService {
         return grievanceRepository.save(grievance);
     }
 
+    public Grievance updateGrievance(Long id, Grievance payload) {
+        Grievance existing = grievanceRepository.findById(id)
+            .orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    "Grievance not found with ID: " + id));
 
+        // only update the three fields
+        existing.setStatus(payload.getStatus());
+        existing.setDescription(payload.getDescription());
+        existing.setCategory(payload.getCategory());
+
+        return grievanceRepository.save(existing);
+    }
 }
