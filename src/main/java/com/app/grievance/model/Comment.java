@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import java.time.LocalDateTime;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Getter
 @Setter
@@ -19,14 +20,16 @@ public class Comment {
     @Column(name = "username")
     private String username;
 
-    @Column(name = "grievance_id")
-    private Long grievanceId;
-
     @Column(name = "comment")
     private String comment;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "grievance_id", nullable = false)
+    @JsonIgnore
+    private Grievance grievance;
 
     @PrePersist
     public void onCreate() {

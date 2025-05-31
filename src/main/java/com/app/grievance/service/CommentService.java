@@ -1,7 +1,9 @@
 package com.app.grievance.service;
 
 import com.app.grievance.model.Comment;
+import com.app.grievance.model.Grievance;
 import com.app.grievance.repository.CommentRepository;
+import com.app.grievance.repository.GrievanceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,8 +15,14 @@ public class CommentService {
 
     @Autowired
     private CommentRepository commentRepository;
+    @Autowired
+    private GrievanceRepository grievanceRepository;
 
-    public Comment createComment(Comment comment) {
+    public Comment createComment(Comment comment, Long grievanceId) {
+        Grievance grievance = grievanceRepository.findById(grievanceId)
+                .orElseThrow(() -> new IllegalArgumentException("Grievance not found"));
+        comment.setGrievance(grievance);
+        // Only save the comment, do not add to grievance.getComments() or save grievance here
         return commentRepository.save(comment);
     }
 
@@ -23,11 +31,11 @@ public class CommentService {
     }
 
     public List<Comment> getCommentsByGrievanceId(Long grievanceId) {
-        return commentRepository.findByGrievanceId(grievanceId);
+        return commentRepository.findByGrievance_Id(grievanceId);
     }
 
     public List<Comment> getCommentsByGrievanceIdAndUsername(Long grievanceId, String username) {
-        return commentRepository.findByGrievanceIdAndUsername(grievanceId, username);
+        return commentRepository.findByGrievance_IdAndUsername(grievanceId, username);
     }
 
     public Comment getCommentById(Long id) {
@@ -47,10 +55,9 @@ public class CommentService {
     }
 
     public void deleteComment(Long id) {
-        if (commentRepository.existsById(id)) {
-            commentRepository.deleteById(id);
-        } else {
-            throw new RuntimeException("Comment not found");
+        if (!commentRepository.existsById(id)) {
+            throw new RuntimeException("Comment not found with ID: " + id);
         }
+        commentRepository.deleteById(id);
     }
 }
