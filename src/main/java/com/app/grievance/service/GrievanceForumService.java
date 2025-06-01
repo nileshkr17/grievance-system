@@ -103,9 +103,15 @@ public class GrievanceForumService {
                     "Grievance not found with ID: " + id));
 
         // only update the three fields
-        existing.setStatus(payload.getStatus());
-        existing.setDescription(payload.getDescription());
-        existing.setCategory(payload.getCategory());
+        if (payload.getStatus() != null) {
+            existing.setStatus(payload.getStatus());
+        }
+        if (payload.getDescription() != null) {
+            existing.setDescription(payload.getDescription());
+        }
+        if (payload.getCategory() != null) {
+            existing.setCategory(payload.getCategory());
+        }
 
         return grievanceRepository.save(existing);
     }
