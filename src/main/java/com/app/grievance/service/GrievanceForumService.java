@@ -112,6 +112,9 @@ public class GrievanceForumService {
         if (payload.getCategory() != null) {
             existing.setCategory(payload.getCategory());
         }
+        if (payload.getAssignedTo() != null) {
+            existing.setAssignedTo(payload.getAssignedTo());
+        }
 
         return grievanceRepository.save(existing);
     }
