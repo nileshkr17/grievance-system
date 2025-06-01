@@ -74,7 +74,7 @@ public class GrievanceForumController {
     return ResponseEntity.ok(filtered);
   }
 
-  @PutMapping("/{id}")
+  @PatchMapping("/{id}")
   public ResponseEntity<Grievance> updateGrievance(
           @PathVariable Long id,
           @RequestBody Grievance grievancePayload) {
