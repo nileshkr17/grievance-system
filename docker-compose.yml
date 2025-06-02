@@ -23,9 +23,9 @@ services:
     depends_on:
       - mysql
     environment:
-      DATABASE_URL: jdbc:mysql://mysql:3306/grievance_db
+      DATABASE_URL: jdbc:mysql://root:daNzbukvRMNOHTRrvJkpIOvxKmLtikeD@caboose.proxy.rlwy.net:15913/railway
       DATABASE_USERNAME: root
-      DATABASE_PASSWORD: root
+      DATABASE_PASSWORD: daNzbukvRMNOHTRrvJkpIOvxKmLtikeD
       PORT: 10000
     restart: always
 

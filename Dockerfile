@@ -12,7 +12,8 @@ FROM eclipse-temurin:17-jre
 WORKDIR /app
 
 # Copy the built jar file into the container
-COPY target/*.jar app.jar
+COPY --from=builder /app/target/*.jar app.jar
+#COPY target/*.jar app.jar
 
 # Expose the port Render expects (default 10000)
 EXPOSE 10000
