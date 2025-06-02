@@ -30,4 +30,21 @@ public class CommentController {
             commentService.getCommentsByGrievanceIdAndUsername(grievanceId, username)
         );
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Comment> updateComment(@PathVariable Long id, @RequestBody Comment updatedComment) {
+        try {
+            Comment updated = commentService.updateComment(id, updatedComment);
+            return ResponseEntity.ok(updated);
+        } catch (RuntimeException e) {
+            // Return 404 if comment not found
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteComment(@PathVariable Long id) {
+        commentService.deleteComment(id);
+        return ResponseEntity.noContent().build();
+    }
 }
