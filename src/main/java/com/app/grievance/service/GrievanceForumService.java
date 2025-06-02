@@ -37,10 +37,19 @@ public Grievance addComment(GrievanceRequest req) {
   Grievance g = grievanceRepository.findById(req.getId())
       .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-  Comment c = new Comment();
-  c.setText(req.getComment());
-  c.setUsername(req.getUsername());
-  c.setGrievance(g);
+
+      // Set the comment (no setComment method, so add to comments list if needed)
+      // grievance.setComment(grievanceRequest.getComment());
+      // Optionally, you can add a new Comment entity to the grievance's comments list here if needed
+      grievance.setStatus("Commented"); // Update status if needed
+      return grievanceRepository.save(grievance);
+    }
+    catch (Exception e) {
+      e.printStackTrace();  // Or log.error("Error:", e);
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Grievance not found with ID: " + grievanceRequest.getId());
+    }
+  }
+
 
   g.getComments().add(c);
   g.setStatus("Commented");

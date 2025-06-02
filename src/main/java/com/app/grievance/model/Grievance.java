@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import java.util.Date;
+import java.util.List;
 
 @Setter
 @Getter
@@ -31,18 +32,18 @@ public class Grievance {
   @Temporal(TemporalType.TIMESTAMP)
   private java.util.Date createdAt;
 
-  @OneToMany(
-    mappedBy = "grievance",
-    cascade = CascadeType.ALL,
-    orphanRemoval = true
-  )
-  private List<Comment> comments = new ArrayList<>();
+
+  @OneToMany(mappedBy = "grievance", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  private List<Comment> comments;
+
 
   // Default constructor
   public Grievance() {}
 
   // Constructor with fields (excluding id, which is auto-generated)
-  public Grievance(String title, String description, String status, String category, String createdBy, String assignedTo, java.util.Date createdAt) {
+
+  public Grievance(String title, String description, String status, String category, String createdBy, String assignedTo, java.util.Date createdAt, List<Comment> comments) {
+
     this.title = title;
     this.description = description;
     this.status = status;
@@ -50,5 +51,6 @@ public class Grievance {
     this.createdAt = createdAt;
     this.createdBy = createdBy;
     this.assignedTo = assignedTo;
+    this.comments = comments;
   }
 }
