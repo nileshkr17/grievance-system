@@ -1,31 +1,33 @@
 version: '3.8'
 
 services:
-  postgres:
-    image: postgres:15
-    container_name: postgres
+  mysql:
+    image: mysql:8
+    container_name: mysql
     restart: always
     environment:
-      POSTGRES_DB: grievance_db
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      MYSQL_DATABASE: grievance_db
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
     ports:
-      - "5432:5432"
+      - "3306:3306"
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - mysql_data:/var/lib/mysql
 
   grievance-backend:
     build: .
     container_name: grievance-app
     ports:
-      - "8080:8080"
+      - "10000:10000"
     depends_on:
-      - postgres
+      - mysql
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/grievance_db
-      SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: postgres
+      DATABASE_URL: jdbc:mysql://mysql:3306/grievance_db
+      DATABASE_USERNAME: root
+      DATABASE_PASSWORD: root
+      PORT: 10000
     restart: always
 
 volumes:
-  pgdata:
+  mysql_data:
