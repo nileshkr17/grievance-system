@@ -5,8 +5,20 @@ COPY . .
 RUN mvn clean package -DskipTests
 
 # ---------- Stage 2: Run ----------
-FROM eclipse-temurin:17-jdk-jammy
+# Use an official OpenJDK runtime as a parent image
+FROM eclipse-temurin:17-jre
+
+# Set the working directory in the container
 WORKDIR /app
-COPY --from=builder /app/target/*.jar app.jar
-EXPOSE 8080
+
+# Copy the built jar file into the container
+COPY target/*.jar app.jar
+
+# Expose the port Render expects (default 10000)
+EXPOSE 10000
+
+# Set environment variable for port (Render will set PORT)
+ENV PORT=10000
+
+# Run the jar file
 ENTRYPOINT ["java", "-jar", "app.jar"]
