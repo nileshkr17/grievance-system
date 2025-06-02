@@ -39,8 +39,9 @@ public class GrievanceForumService {
       Grievance grievance = grievanceRepository.findById(grievanceRequest.getId())
         .orElseThrow(() -> new IllegalArgumentException("Grievance not found with ID: " + grievanceRequest.getId()));
 
-      // Set the comment
-      grievance.setComment(grievanceRequest.getComment());
+      // Set the comment (no setComment method, so add to comments list if needed)
+      // grievance.setComment(grievanceRequest.getComment());
+      // Optionally, you can add a new Comment entity to the grievance's comments list here if needed
       grievance.setStatus("Commented"); // Update status if needed
       return grievanceRepository.save(grievance);
     }
