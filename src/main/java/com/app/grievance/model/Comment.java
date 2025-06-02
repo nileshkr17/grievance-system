@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import java.time.LocalDateTime;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Getter
 @Setter
@@ -15,7 +16,7 @@ public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "comment_id")
-    private Long commentId; // Auto-generated comment ID
+    private Long commentId;
 
     @Column(name = "username")
     private String username;
@@ -30,6 +31,24 @@ public class Comment {
     @JoinColumn(name = "grievance_id", nullable = false)
     @JsonIgnore
     private Grievance grievance;
+
+    // this is not a column in the DB
+    @Transient
+    @JsonProperty("grievanceId")
+    private Long grievanceId;
+
+    @JsonProperty("grievanceId")
+    public void setGrievanceId(Long grievanceId) {
+        this.grievanceId = grievanceId;
+        // populate the actual relationship stub
+        this.grievance = new Grievance();
+        this.grievance.setId(grievanceId);
+    }
+
+    // optional: expose it in JSON if you like
+    public Long getGrievanceId() {
+        return this.grievance != null ? this.grievance.getId() : null;
+    }
 
     @PrePersist
     public void onCreate() {

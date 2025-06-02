@@ -16,15 +16,18 @@ public class CommentController {
     private CommentService commentService;
 
     @PostMapping
-    public ResponseEntity<Comment> addComment(@RequestBody Comment comment, @RequestParam Long grievanceId) {
-        Comment savedComment = commentService.createComment(comment, grievanceId);
-        return ResponseEntity.ok(savedComment);
+    public ResponseEntity<Comment> addComment(@RequestBody Comment comment) {
+        // grievanceId already wired into comment.getGrievance().getId()
+        Comment saved = commentService.createComment(comment, comment.getGrievance().getId());
+        return ResponseEntity.ok(saved);
     }
 
     @GetMapping
     public ResponseEntity<List<Comment>> getComments(@RequestParam String gid,
                                                      @RequestParam String username) {
         Long grievanceId = Long.parseLong(gid);
-        return ResponseEntity.ok(commentService.getCommentsByGrievanceIdAndUsername(grievanceId, username));
+        return ResponseEntity.ok(
+            commentService.getCommentsByGrievanceIdAndUsername(grievanceId, username)
+        );
     }
 }
